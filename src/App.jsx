@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import TaskManagementForm from './components/TaskManagementForm'
 import todo from "./assets/todo.png"
@@ -8,18 +8,22 @@ import TaskComponent from './components/TaskComponent'
 
 function App() {
   
+  const [tasks, setTasks] = useState([]);
+
+  console.log("Task = ", tasks)
+  const handleDelete = (taskIndex) => {
+    const newTasks = tasks.filter((task, index) => index !== taskIndex);
+    setTasks(newTasks);
+  }
 
   return (
     <div className='app'>
-      <TaskManagementForm />
+      <TaskManagementForm setTasks={setTasks} />
 
       <main className='app_main'>
-                   {/* <option value='todo'>To do</option>
-                    <option value='inprogress'>In progress</option>
-                    <option value='done'>Done</option> */}
-        <TaskComponent title="To do" icon={todo} />
-        <TaskComponent title="In progress" icon={inprogress} />
-        <TaskComponent title="Done" icon={done} />
+        <TaskComponent title="To do" icon={todo} tasks={tasks} status="todo" handleDelete={handleDelete} />
+        <TaskComponent title="In progress" icon={inprogress} tasks={tasks} status="inprogress" handleDelete={handleDelete} />
+        <TaskComponent title="Done" icon={done} tasks={tasks} status="done" handleDelete={handleDelete} />
       </main>
 
     </div>

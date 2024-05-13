@@ -3,13 +3,26 @@ import "./TaskManagementForm.css";
 import ButtonTag from "./ButtonTag";
 
 
-const TaskManagementForm = () => {
+const TaskManagementForm = ({setTasks}) => {
   
   const [taskData, setTaskData] = useState({
     task: "",
     status: "todo",
     tags: []
   })
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setTasks(prev => {
+      return [...prev, taskData]
+    })
+
+    setTaskData({
+      task: "",
+      status: "todo",
+      tags: []
+    })
+  }
 
   const selectTag = (button_name) => {
     // console.log(button_name);
@@ -37,6 +50,7 @@ const TaskManagementForm = () => {
       return {...prev, [name]: value}
     })
   }
+  
   console.log(taskData.tags);
   const handleTaskChange = e => {
     setTask(e.target.value)
@@ -47,12 +61,14 @@ const TaskManagementForm = () => {
 
   return (
     <header className="app_header">
-      <form>
+      <form onSubmit={handleSubmit} >
         <input
           type="text"
+          name="task"
           className="task_input"
           placeholder="Enter your task"
           onChange={handleChange}
+          value={taskData.task}
         />
         <div className="task_form_bottom_line">
                 
@@ -61,7 +77,7 @@ const TaskManagementForm = () => {
           <ButtonTag button_name="React" selectTag={selectTag} selected={checkTag("React")} />
           <ButtonTag button_name="NodeJs" selectTag={selectTag} selected={checkTag("NodeJs")} />
 
-          <select className="task_status" onChange={handleChange} >
+          <select name="status" className="task_status" onChange={handleChange}  value={taskData.status} >
             <option value="todo">To do</option>
             <option value="inprogress">In progress</option>
             <option value="done">Done</option>
